@@ -62,7 +62,7 @@ function App() {
     localStorage.setItem('todo', JSON.stringify(todoObj));
 
     alert('추가되었습니다.')
-    window.location.href='/'
+    window.location.href='/todolist-local/'
   }
 
   const deleteTodo =  (num) => {
@@ -73,7 +73,7 @@ function App() {
     localStorage.setItem('todo', JSON.stringify(result));
 
     alert('삭제되었습니다.')
-    window.location.href='/'
+    window.location.href='/todolist-local/'
   }
 
   const updateTodo = (num, mtodo, mdate, mcomplete) => {
@@ -86,13 +86,13 @@ function App() {
     localStorage.setItem('todo', JSON.stringify(result));
 
     alert('수정되었습니다.')
-    window.location.href='/'
+    window.location.href='/todolist-local/'
   }
 
   const deleteAll =  () => {
     localStorage.removeItem('todo')
     alert('전체 삭제되었습니다.')
-    window.location.href = '/'
+    window.location.href = '/todolist-local/'
   }
   const clearAll =  () => {
     for(var i=0; i<todolist.length; i++){
@@ -101,7 +101,7 @@ function App() {
     //console.log(todolist)
     localStorage.setItem('todo', JSON.stringify(todolist));
     alert('전체 완료되었습니다.')
-    window.location.href = '/'
+    window.location.href = '/todolist-local/'
     
   }
   const declearAll =  () => {
@@ -110,7 +110,7 @@ function App() {
     }
     //console.log(todolist)
     localStorage.setItem('todo', JSON.stringify(todolist));
-    window.location.href = '/'
+    window.location.href = '/todolist-local/'
     alert('전체 취소되었습니다.')
   }
 
@@ -122,7 +122,7 @@ function App() {
     }
     //console.log(todolist)
     localStorage.setItem('todo', JSON.stringify(todolist));
-    window.location.href = '/'
+    window.location.href = '/todolist-local/'
   }
 
   return (
