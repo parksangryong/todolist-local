@@ -3,7 +3,6 @@ import Header from './components/Header';
 import TodoInput from './components/TodoInput';
 import Todolist from './components/Todolist';
 import Footer from './components/Footer';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs'
 
@@ -14,20 +13,39 @@ function App() {
   useEffect(
     () => {
       getTodo();
-    }, [ale])
+    }, [])
 
-  const getTodo = async() => {
-    const result = await axios.get('/todo');
-    setTodolist(result.data);
-    //console.log(todolist);
+  const getTodo = () => {
+    var myArr = JSON.parse(localStorage.getItem('todo'))
+
+    if(myArr == null){
+      setTodolist([])
+    }else{
+      setTodolist(myArr)
+    }
+
+    setAle('전체조회')
   }
 
-  const checkTodo = async(tf) => {
-    const result = await axios.get('/todo/' + tf);
-    setTodolist(result.data);
+  const checkTodo = (tf) => {
+    var myArr = JSON.parse(localStorage.getItem('todo'));
+
+    var result = myArr.filter(
+      (data) => (data.complete == tf)
+    )
+    //console.log(result)
+    setTodolist(result)
+
+    if(tf == 0){
+      setAle('할일만 보여줍니다.')
+    }
+    else if(tf == 1){
+      setAle('완료한 일만 보여줍니다.')
+    }
+    
   }
 
-  const addTodo = async (intodo) => {
+  const addTodo = (intodo) => {
     if(todolist.length == 0){
       var numA = 1
     }
@@ -38,53 +56,73 @@ function App() {
    
     const days = dayjs(new Date()).format('YYYY-MM-DD');
 
-    const todoObj = {num: numA, todo: intodo, date: days}
+    const todoObj = [...todolist, {num: numA, todo: intodo, date: days, complete: 0}]
     //console.log(todoObj)
 
-    const result = await axios.post('/todo', todoObj);
-    setAle(result)
+    localStorage.setItem('todo', JSON.stringify(todoObj));
+
+    alert('추가되었습니다.')
+    window.location.href='/'
   }
 
-  const deleteTodo = async (num) => {
-    //console.log('app del')
-    //console.log(num)
-    const result = await axios.delete('/todo', {data : {num}})
-    setAle(result)
+  const deleteTodo =  (num) => {
+    const result = todolist.filter(
+      (data) => (data.num != num)
+    )
+
+    localStorage.setItem('todo', JSON.stringify(result));
+
+    alert('삭제되었습니다.')
+    window.location.href='/'
   }
 
-  const updateTodo = async (num, mtodo, mdate) => {
-    //console.log('app up')
-    //console.log(mtodo, mdate)\\
+  const updateTodo = (num, mtodo, mdate, mcomplete) => {
+    const todoObj = {num: num, todo: mtodo, date: mdate, complete: mcomplete};
 
-    const days = mdate.substr(0,10)
-    const todoObj = {num: num, todo: mtodo, date: days}
-    //console.log(todoObj)
+    const result = todolist.map((data) => (
+        data.num === todoObj.num ? {...data, ...todoObj} : data
+    ));
 
-    const result = await axios.put('/todo', todoObj)
-    setAle(result)
+    localStorage.setItem('todo', JSON.stringify(result));
+
+    alert('수정되었습니다.')
+    window.location.href='/'
   }
 
-  const deleteAll = async () => {
-    const result = await axios.delete('/todoall')
-    setAle(result)
+  const deleteAll =  () => {
+    localStorage.removeItem('todo')
+    alert('전체 삭제되었습니다.')
+    window.location.href = '/'
   }
-  const clearAll = async () => {
-    const result = await axios.put('/todoall')
-    setAle(result)
+  const clearAll =  () => {
+    for(var i=0; i<todolist.length; i++){
+      todolist[i].complete = 1
+    }
+    //console.log(todolist)
+    localStorage.setItem('todo', JSON.stringify(todolist));
+    alert('전체 완료되었습니다.')
+    window.location.href = '/'
+    
   }
-  const declearAll = async () => {
-    const result = await axios.put('/todoallx')
-    setAle(result)
+  const declearAll =  () => {
+    for(var i=0; i<todolist.length; i++){
+      todolist[i].complete = 0
+    }
+    //console.log(todolist)
+    localStorage.setItem('todo', JSON.stringify(todolist));
+    window.location.href = '/'
+    alert('전체 취소되었습니다.')
   }
 
-  const completeTodo = async(num, completestate) => {
-    //console.log('com')
-
-    const todoObj = {num: num, complete : completestate}
-    //console.log(todoObj)
-
-    const result = await axios.put('/todocom', todoObj)
-    setAle(result)
+  const completeTodo = (num, completestate) => {
+    for(var i=0; i<todolist.length; i++){
+      if(todolist[i].num == num){
+        todolist[i].complete = completestate
+      }
+    }
+    //console.log(todolist)
+    localStorage.setItem('todo', JSON.stringify(todolist));
+    window.location.href = '/'
   }
 
   return (

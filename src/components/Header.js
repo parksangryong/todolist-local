@@ -4,10 +4,10 @@ import dayjs from 'dayjs'
 //제목, 날짜, 남은 할일 개수, 완료 할일 개수 
 function Header(props){
     const declear = props.todolist.filter(
-        (data) => (data.complete == '0')
+        (data) => (data.complete == 0)
     )
     const clear = props.todolist.filter(
-        (data) => (data.complete == '1')
+        (data) => (data.complete == 1)
     )
 
     const days = dayjs(new Date()).format('YYYY-MM-DD dddd');

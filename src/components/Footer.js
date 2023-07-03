@@ -15,7 +15,7 @@ function Footer(props){
     return(
         <div id='footer'>
             <div className='footer-txt'>
-            {props.ale.data}
+            {props.ale}
             </div>
             <div className='footer-btn'>
             <button onClick={deleteAll}>전체 삭제</button>
